@@ -1,0 +1,59 @@
+$fn = 100;
+height = 20;
+topRadius = 49.5;//This number should not be changed
+bottomRadius =49.8;//This number should not be changed
+//creates a half circle
+ module halfCircle(){
+     translate([0,16.5,0])
+        rotate([90,0,90])
+            cylinder(2,15,15,center = true);
+ }
+//The main module makes the main body 
+module main(){ 
+difference(){ 
+cylinder(height,54.5, 54.5,center = true);//This is the outer cirlce 
+    cylinder(height, bottomRadius, topRadius, center = true);//This is the inner circle
+    for ( i = [0 : 19] ){
+            rotate( i * 18, [0, 0, 1])
+            translate([0, 52, 0])// The second number is the avg. between outer and inner radius
+        {
+            cylinder(100,1,1, center = true);
+            halfCircle();
+        }
+    }
+}
+}
+
+//This difference function will make the cut in the ring
+module cut(){
+difference(){
+    
+main();
+rotate([0,0,90])
+translate([0,50,0])
+cube([.5,50,30], center = true);
+}
+}
+
+//This function will make the tabs
+module tabs(){
+    translate([-61.5,2.7,0])
+    cube([22,5,height], center = true);// the number 15.5 should be 15,but needs more material to fill the gap
+    translate([-61.5,-2.7,0])
+    cube([22,5,height], center = true);
+}
+
+//This function will cut through the tabs to make the holes for the bolts
+module cut2(){
+    difference (){
+        tabs();//-
+        translate([-63.5,25,0])// the first number in translate should be the same as in the trasnlate in tabs()
+            rotate([90,0,0])
+                //cylinder(50,8,8);
+               cylinder(50,2.5,2.5);
+        }
+}
+
+cut2();
+cut();
+
