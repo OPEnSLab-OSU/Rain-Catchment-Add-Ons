@@ -1,0 +1,133 @@
+$fn = 20;
+
+x = -30;//attachment movelocation 
+y = -5; //attachment move location 
+z = -5.75; //attachment move location
+
+
+x2 = 5;//attachment movelocation 
+y2 = 30; //attachment move location 
+z2 = -5.75; //attachment move location
+
+x3 = 5;//attachment movelocation 
+y3 = -30; //attachment move location 
+z3 = -5.75; //attachment move location
+
+
+w_hole1 = .75;//radius of the first water hole
+w_hole2 = 2;//radius of the second water hole
+w_hole3 =1;//radius of the third water hole
+
+
+//main base
+module mainbody_ring(){
+    
+    difference(){
+    cylinder(11.5, 46.25, 46.25, center = true);
+ 
+        //translate([5+x,0+y,0])
+            //cylinder(60,h1,h1, center = true);// this is the hole on the right
+        translate([-5+x,0+y,0])
+            cylinder(60,w_hole1,w_hole1, center = true);// this is the hole on the left 
+        translate([-5+x2,0+y2,0])
+            cylinder(60,w_hole2,w_hole2, center = true);
+        
+        translate([-5+x3,0+y3,0])
+            cylinder(60,w_hole3,w_hole3, center = true);
+        
+    }
+}
+module cut_out(){
+    difference(){
+        mainbody_ring();
+        translate([40,0,0])
+            cylinder(14,7,7, center = true);
+    }
+}
+
+
+module base(){
+    cut_out();
+}
+
+
+
+
+
+
+
+
+
+//attachement************************************************** 
+module mainbody(){
+cylinder(70,12,10.5);// main body (main cylinder) //center
+    
+    /*translate([5,0,15])
+        cylinder( 30,2,2);//this is the cylinder that comes out of the main cylinder//center
+    */
+}
+
+module holes(h1,h2){
+
+    difference(){
+        mainbody();
+        translate([5,0,0])
+            cylinder(170,h1,h1, center = true);// this is the hole on the right//center
+        translate([-5,0,0])
+            cylinder(170,h2,h2, center = true);// this is the hole on the left //center
+        
+    }
+}
+
+
+module o_ring(h1,h2){
+    difference(){
+        holes(h1,h2);
+        rotate_extrude(convexity = 10)
+            translate([10.5, 72+z, 0+x])//ring extrude
+                circle(d = 2.4, center = true);
+        
+        rotate_extrude(convexity = 10)
+            translate([11.5, 72+z,0+x])//square extrude
+                square([2,2.4], center = true);
+        
+        
+    }
+}
+module attach(h1,h2){
+o_ring(h1,h2);
+}
+
+
+
+
+
+base();
+//attach(air,water)
+
+
+translate([x,y,z])
+    difference(){
+        attach(1,w_hole1);
+            translate([16,0,11])
+                    cube([30,30,100],center = true);
+    }
+
+translate([x2,y2,z2])
+    difference(){
+        attach(1,w_hole2);
+            translate([16,0,11])
+                    cube([30,30,100],center = true);
+    }
+
+translate([x3,y3,z3])
+    difference(){
+        attach(1,w_hole3);
+            translate([16,0,11])
+                    cube([30,30,100],center = true);
+    }
+    
+
+
+
+
