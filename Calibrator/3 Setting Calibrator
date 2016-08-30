@@ -1,4 +1,8 @@
-$fn = 20;
+$fn = 100;
+
+/****************************************************
+         Calibrator's Locations & Hole Sizes
+****************************************************/
 
 x = -30;//attachment movelocation 
 y = -5; //attachment move location 
@@ -15,15 +19,16 @@ z3 = -5.75; //attachment move location
 
 
 w_hole1 = .75;//radius of the first water hole
-w_hole2 = 2;//radius of the second water hole
-w_hole3 =1;//radius of the third water hole
+w_hole2 = .75;//radius of the second water hole
+w_hole3 = 1;//radius of the third water hole
 
-
-//main base
+/****************************************************
+                    Main base
+****************************************************/
 module mainbody_ring(){
     
     difference(){
-    cylinder(11.5, 46.25, 46.25, center = true);
+    cylinder(11.5, 46, 46, center = true);
  
         //translate([5+x,0+y,0])
             //cylinder(60,h1,h1, center = true);// this is the hole on the right
@@ -40,8 +45,8 @@ module mainbody_ring(){
 module cut_out(){
     difference(){
         mainbody_ring();
-        translate([40,0,0])
-            cylinder(14,7,7, center = true);
+        translate([43,0,0])
+            cylinder(14,7.5,7.5, center = true);
     }
 }
 
@@ -51,14 +56,10 @@ module base(){
 }
 
 
-
-
-
-
-
-
-
-//attachement************************************************** 
+/****************************************************
+                   Single Calibrator 
+****************************************************/
+//Calibrator main body 
 module mainbody(){
 cylinder(70,12,10.5);// main body (main cylinder) //center
     
@@ -67,6 +68,7 @@ cylinder(70,12,10.5);// main body (main cylinder) //center
     */
 }
 
+//Calibrator Holes
 module holes(h1,h2){
 
     difference(){
@@ -80,6 +82,7 @@ module holes(h1,h2){
 }
 
 
+//O-ring Cutout 
 module o_ring(h1,h2){
     difference(){
         holes(h1,h2);
@@ -98,36 +101,45 @@ module attach(h1,h2){
 o_ring(h1,h2);
 }
 
-
-
-
-
 base();
+
+/****************************************************
+ (3 Instances) Calibrators Hole Sizes & Half Cylinder Subtraction 
+****************************************************/
 //attach(air,water)
-
-
 translate([x,y,z])
     difference(){
-        attach(1,w_hole1);
-            translate([16,0,11])
-                    cube([30,30,100],center = true);
-    }
-
-translate([x2,y2,z2])
-    difference(){
-        attach(1,w_hole2);
-            translate([16,0,11])
-                    cube([30,30,100],center = true);
-    }
-
-translate([x3,y3,z3])
-    difference(){
-        attach(1,w_hole3);
+        attach(.75,w_hole1);
             translate([16,0,11])
                     cube([30,30,100],center = true);
     }
     
+//This cubes are for the suppport 
+translate([5,28,5])
+        cube([10,5,30]);
+translate([0,10,5])
+        cube([5,10,30]);
 
+translate([x2,y2,z2])
+    difference(){
+        attach(.75,w_hole2);
+            translate([16,0,11])
+                    cube([30,30,100],center = true);
+    }
+//This cubes are for the suppport 
+translate([5,-33,5])
+        cube([10,5,30]);
+translate([0,-20,5])
+        cube([5,10,30]);
 
-
-
+translate([x3,y3,z3])
+    difference(){
+        attach(.75,w_hole3);
+            translate([16,0,11])
+                    cube([30,30,100],center = true);
+    }
+//This cubes are for the suppport 
+translate([-29,-7,5])
+        cube([10,5,30]);
+translate([-35,5,5])
+        cube([5,10,30]);
