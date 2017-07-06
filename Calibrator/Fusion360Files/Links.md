@@ -1,6 +1,6 @@
 Link to latest file to the Rain Gauge Calibrator: 
 
-http://a360.co/2dMWAjS
+[Calibrator]{http://a360.co/2dMWAjS}
 
 The browsers that work the best are Chrome and Firefox.
 
